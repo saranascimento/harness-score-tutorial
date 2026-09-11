@@ -1,0 +1,14 @@
+{
+  "name": "meeting-cost-cli",
+  "version": "1.0.0",
+  "description": "Calcula o custo total de mão de obra de uma reunião.",
+  "type": "module",
+  "main": "src/cli.js",
+  "scripts": {
+    "start": "node src/cli.js"
+  },
+  "engines": {
+    "node": ">=24"
+  },
+  "license": "MIT"
+}
