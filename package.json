@@ -1,14 +1,24 @@
 {
-  "name": "meeting-cost-cli",
-  "version": "1.0.0",
-  "description": "Calcula o custo total de mão de obra de uma reunião.",
-  "type": "module",
-  "main": "src/cli.js",
-  "scripts": {
-    "start": "node src/cli.js"
-  },
-  "engines": {
-    "node": ">=24"
-  },
-  "license": "MIT"
+	"name": "meeting-cost-cli",
+	"version": "1.0.0",
+	"description": "Calcula o custo total de mão de obra de uma reunião.",
+	"type": "module",
+	"main": "src/cli.js",
+	"scripts": {
+		"start": "node src/cli.js",
+		"test": "node --test",
+		"lint": "biome lint .",
+		"format": "biome format --write .",
+		"typecheck": "tsc",
+		"check": "npm run lint && npm run typecheck && npm test"
+	},
+	"engines": {
+		"node": ">=24"
+	},
+	"license": "MIT",
+	"devDependencies": {
+		"@biomejs/biome": "2.5.3",
+		"@types/node": "24.13.3",
+		"typescript": "5.9.3"
+	}
 }

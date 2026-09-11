@@ -7,18 +7,26 @@ persistência, sem interface gráfica.
 
 ## Estrutura e comandos
 
-- `package.json` — `"type": "module"`, `engines.node >= 24`, script
-  `start`, `main: src/cli.js`. Nenhum script de teste, lint, formatação,
-  typecheck ou build existe hoje. Não os invente.
+- `package.json` — `"type": "module"`, `engines.node >= 24`, `main:
+  src/cli.js`. Scripts reais: `start`, `test`, `lint`, `format`,
+  `typecheck`, `check` (roda lint, typecheck e testes, nessa ordem).
 - `src/cli.js` — ponto de entrada. Lê `process.argv`, chama
   `calculateMeetingCost`, formata a saída em pt-BR, trata erros.
-- `src/meetingCost.js` — domínio puro. Exporta `calculateMeetingCost`.
+- `src/meetingCost.js` — domínio puro. Exporta `calculateMeetingCost`, com
+  JSDoc (`@param`, `@returns`, `@throws`) verificado por `tsc --checkJs`.
+- `test/meetingCost.test.js` — testes com o test runner nativo do Node
+  (`node:test`).
+- `tsconfig.json`, `biome.json` — configuração de typecheck estrito e de
+  lint/formatação (Biome).
+- `.github/workflows/ci.yml` — roda `npm ci`, lint, typecheck e testes em
+  push para `main` e em pull requests, com permissão somente de leitura de
+  `contents`.
 - `README.md`, `PROJETO.md`, `LICENSE` — não alterar sem pedido explícito.
-- Não existem testes, lint, CI, hooks, rules, skills ou MCP neste
-  repositório. Não presuma a existência desses artefatos.
+- Não existem CI de deploy, hooks, MCP ou subagentes neste repositório.
+  Não presuma a existência desses artefatos.
 - Comando real: `npm start -- <participantes> <duracao_em_minutos>
   <custo_por_hora>` (ex.: `npm start -- 6 45 120`).
-- Não há `package-lock.json` (nenhuma dependência instalada).
+- Verificação: siga `.agents/workflows/verify.md` (não duplicado aqui).
 
 ## Invariantes de domínio
 
@@ -38,8 +46,9 @@ padrão em qualquer nova validação.
 ## Dependências e ESM
 
 Projeto ESM puro (`"type": "module"`), sem dependências de runtime, Node.js
-24+. Não adicione dependências sem necessidade clara; se adicionar, gere o
-`package-lock.json` correspondente.
+24+. `devDependencies` fixadas: `@biomejs/biome` 2.5.3, `typescript` 5.9.3,
+`@types/node` 24.13.3. Não adicione dependências sem necessidade clara; se
+adicionar, atualize o `package-lock.json` correspondente.
 
 ## Limites de segurança
 
@@ -50,14 +59,13 @@ entrada do usuário), ou segredos/credenciais no repositório.
 ## Restrições do agente
 
 Sem pedido explícito, não: mude as invariantes de domínio acima; altere
-`README.md`, `PROJETO.md` ou `LICENSE`; adicione dependências, testes,
-lint, CI, hooks, rules, skills ou MCP; invente comandos ou arquivos
-inexistentes; faça commit.
+`README.md`, `PROJETO.md` ou `LICENSE`; adicione dependências de runtime,
+hooks, MCP, subagentes, pre-commit, workflow do Harness Score ou CI de
+deploy; invente comandos ou arquivos inexistentes; faça commit.
 
 ## Checklist de conclusão
 
-- [ ] Invariantes de domínio preservadas e validadas manualmente com
-      `npm start -- ...`.
+- [ ] `npm run check` passa (lint, typecheck e testes).
 - [ ] ESM puro, Node.js 24+, sem dependências de runtime não solicitadas.
 - [ ] Erros lançam `Error` claro e são tratados em `src/cli.js`
       (`console.error` + `process.exitCode = 1`).
